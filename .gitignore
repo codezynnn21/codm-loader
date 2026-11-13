@@ -1,0 +1,16 @@
+# gradle / android studio
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# native build output: cmake writes the injector binary straight into assets
+app/src/main/assets/injector
+
+# keystores
+*.jks
+*.keystore

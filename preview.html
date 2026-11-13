@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Prjct zxore loader — ui preview</title>
+<style>
+  :root{
+    --bg-top:#111111; --bg-bottom:#000000; --card:#141414; --card-edge:#262626;
+    --hairline:#2E2E2E; --text:#F2F2F2; --text-dim:#9A9A9A; --text-faint:#5C5C5C;
+    --accent:#EDEDED; --accent-dim:#8A8A8A; --ok:#F5F5F5; --warn:#B0B0B0; --bad:#707070;
+    --head:"Segoe UI Semibold","Helvetica Neue",Arial,sans-serif;
+    --bold:"Segoe UI",Arial,sans-serif;
+    --mono:"Cascadia Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#050505;color:var(--text);font-family:var(--bold);
+       display:flex;gap:28px;justify-content:center;padding:34px 20px 60px;flex-wrap:wrap}
+  .phone{width:372px;height:744px;border-radius:34px;overflow:hidden;position:relative;
+         border:1px solid #1c1c1c;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+  .cap{text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-faint);
+       letter-spacing:.14em;margin-top:10px}
+
+  /* ---------- splash ---------- */
+  .splash{background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom))}
+  .splash:before{content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 16% 10%, rgba(255,255,255,.10), transparent 62%),
+      radial-gradient(circle at 88% 86%, rgba(255,255,255,.07), transparent 55%)}
+  .splash:after{content:"";position:absolute;inset:0;opacity:.05;
+    background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);
+    background-size:30px 30px}
+  .splash .in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center}
+  .ring{margin-top:118px;width:150px;height:150px;position:relative;display:grid;place-items:center}
+  .ticks{position:absolute;inset:-16px;border-radius:50%;
+    background:repeating-conic-gradient(from 0deg, rgba(255,255,255,.55) 0deg 1.4deg, rgba(255,255,255,.08) 1.4deg 5.6deg);
+    -webkit-mask:radial-gradient(circle, transparent 64%, #000 65%)}
+  .track{position:absolute;inset:0;border-radius:50%;border:6px solid var(--hairline)}
+  .sweep{position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from -90deg, var(--accent), var(--accent-dim) 62%, transparent 62%);
+    -webkit-mask:radial-gradient(circle, transparent 62%, #000 63%)}
+  .disc{width:96px;height:96px;border-radius:50%;overflow:hidden;position:relative;
+    background:radial-gradient(circle at 34% 28%, #2a2a2a, #121212 62%);
+    border:1px solid rgba(255,255,255,.22);display:grid;place-items:center}
+  .disc img{width:100%;height:100%;object-fit:cover;display:block}
+  .word{margin-top:26px;font-family:var(--bold);font-weight:800;font-size:23px;letter-spacing:.2em}
+  .analyzing{margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--accent-dim);letter-spacing:.28em}
+  .barwrap{width:70%;margin-top:70px}
+  .track2{height:7px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+  .fill{height:100%;width:78%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent-dim))}
+  .barlabels{display:flex;justify-content:space-between;margin-top:8px;
+    font-family:var(--mono);font-size:11px;color:var(--text-faint)}
+  .barlabels b{color:var(--text);font-weight:400}
+  .steps{width:70%;margin-top:26px;background:rgba(20,20,20,.6);border-radius:18px;padding:14px 18px}
+  .step{display:flex;align-items:center;gap:12px;height:30px;font-size:12.5px}
+  .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .step .name{font-family:var(--head);color:var(--text)}
+  .step .st{margin-left:auto;font-family:var(--mono);font-size:10.5px}
+  .wait .name{color:var(--text-faint)}
+  .foot{position:absolute;bottom:14px;left:22px;right:22px;display:flex;justify-content:space-between;
+    font-family:var(--mono);font-size:10px;color:var(--text-faint);z-index:2}
+
+  /* ---------- menu ---------- */
+  .menu{background:var(--bg-bottom);padding:14px 18px 12px;display:flex;flex-direction:column}
+  .phone.menu{height:900px}
+  .head{display:flex;align-items:center;gap:12px;padding:2px 0 4px}
+  .mark{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;
+    overflow:hidden;
+    background:radial-gradient(circle,rgba(255,255,255,.30),rgba(255,255,255,0) 70%),
+               radial-gradient(circle at 34% 28%, #2a2a2a, #121212 62%);
+    border:1px solid rgba(255,255,255,.28)}
+  .mark img{width:100%;height:100%;object-fit:cover;display:block}
+  .brand{font-size:21px;font-weight:800;letter-spacing:.2em;line-height:1.1}
+  .tag{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:2px}
+  .badge{margin-left:auto;font-size:10px;font-family:var(--head);color:var(--ok);
+    background:rgba(255,255,255,.12);padding:5px 10px;border-radius:11px}
+  .cards{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;margin-top:12px}
+  .card{background:var(--card);border:1px solid var(--card-edge);border-radius:18px;padding:12px 14px 14px}
+  .sec{font-family:var(--head);font-size:11px;color:var(--accent);letter-spacing:.2em;padding:2px 0 8px}
+  .row{display:flex;align-items:center;padding:7px 0}
+  .k{font-family:var(--head);font-size:11px;color:var(--text-dim);letter-spacing:.1em}
+  .v{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--text);
+     max-width:64%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hair{height:1px;background:var(--hairline)}
+  .v.log{margin-left:0;text-align:left;max-width:100%;font-size:10px;color:var(--text-dim);
+     white-space:normal}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .dim{color:var(--text-dim)}
+  .status{margin-top:auto;background:#0E0E0E;border:1px solid var(--card-edge);border-radius:14px;
+    padding:11px 14px;font-family:var(--mono);font-size:11px;color:var(--accent-dim)}
+  .cta{margin-top:12px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    gap:10px;background:linear-gradient(90deg,var(--accent),var(--accent-dim));
+    color:#0A0A0A;font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:.2em}
+  .cta span.ring2{font-size:13px}
+  .ghosts{margin-top:10px;height:44px;display:flex;gap:10px}
+  .ghost{flex:1;border-radius:14px;background:#111111;border:1px solid var(--card-edge);
+    display:flex;align-items:center;justify-content:center;font-family:var(--head);
+    font-size:11.5px;color:var(--text-dim);letter-spacing:.1em}
+  .water{margin-top:8px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--text-faint)}
+</style>
+</head>
+<body>
+
+  <div>
+    <div class="phone splash">
+      <div class="in">
+        <div class="ring">
+          <div class="ticks"></div>
+          <div class="track"></div>
+          <div class="sweep"></div>
+          <div class="disc"><img src="app/src/main/res/drawable-nodpi/ic_logo.png" alt=""></div>
+        </div>
+        <div class="word">PRJCT ZXORE</div>
+        <div class="analyzing">ANALYZING</div>
+        <div class="barwrap">
+          <div class="track2"><div class="fill"></div></div>
+          <div class="barlabels"><span>ANALYZING</span><b>78%</b></div>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="dot" style="background:var(--ok)"></span>
+            <span class="name">ROOT ACCESS</span><span class="st" style="color:var(--ok)">OK</span></div>
+          <div class="step"><span class="dot" style="background:var(--ok)"></span>
+            <span class="name">INJECTOR STAGE</span><span class="st" style="color:var(--ok)">OK</span></div>
+          <div class="step"><span class="dot" style="background:var(--ok)"></span>
+            <span class="name">PAYLOAD HASH</span><span class="st" style="color:var(--ok)">OK</span></div>
+          <div class="step"><span class="dot" style="background:var(--accent-dim)"></span>
+            <span class="name">TARGET SCAN</span><span class="st" style="color:var(--accent-dim)">WORKING</span></div>
+          <div class="step wait"><span class="dot" style="background:var(--text-faint)"></span>
+            <span class="name">ENVIRONMENT</span><span class="st" style="color:var(--text-faint)">WAIT</span></div>
+        </div>
+      </div>
+      <div class="foot"><span>v2.0</span><span>1.4s</span></div>
+    </div>
+    <div class="cap">SPLASH · COLD OPEN</div>
+  </div>
+
+  <div>
+    <div class="phone menu">
+      <div class="head">
+        <div class="mark"><img src="app/src/main/res/drawable-nodpi/ic_logo.png" alt=""></div>
+        <div>
+          <div class="brand">PRJCT ZXORE</div>
+          <div class="tag">SECURE LOADER</div>
+        </div>
+        <div class="badge">ROOT OK</div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="sec">T A R G E T</div>
+          <div class="row"><span class="k">PACKAGE</span><span class="v">com.garena.game.codm</span></div>
+          <div class="hair"></div>
+          <div class="row"><span class="k">PID</span><span class="v ok">18422</span></div>
+          <div class="hair"></div>
+          <div class="row"><span class="k">PROCESS</span><span class="v ok">RUNNING</span></div>
+          <div class="hair"></div>
+        </div>
+
+        <div class="card">
+          <div class="sec">P A Y L O A D</div>
+          <div class="row"><span class="k">BUILD</span><span class="v">loader 2.0</span></div>
+          <div class="hair"></div>
+          <div class="row"><span class="k">HOOK LIB</span><span class="v ok">PACKAGED</span></div>
+          <div class="hair"></div>
+          <div class="row"><span class="k">CONFIG MODE</span><span class="v">PATCH</span></div>
+          <div class="hair"></div>
+        </div>
+
+        <div class="card">
+          <div class="sec">R U N T I M E</div>
+          <div class="row"><span class="k">ROOT</span><span class="v ok">GRANTED</span></div>
+          <div class="hair"></div>
+          <div class="row"><span class="k">INJECTOR</span><span class="v ok">STAGED</span></div>
+          <div class="hair"></div>
+        </div>
+
+        <div class="card">
+          <div class="sec">L O G</div>
+          <div class="row"><span class="v log">[14:02:11] injector -&gt; /data/local/tmp/codm_injector</span></div>
+          <div class="row"><span class="v log">[14:02:12] target com.garena.game.codm pid 18422</span></div>
+          <div class="row"><span class="v log ok">[14:02:13] injector: ok</span></div>
+        </div>
+      </div>
+
+      <div class="status">●&nbsp;&nbsp;INJECTED · PID 18422</div>
+      <div class="cta"><span class="ring2">▶</span>INJECT</div>
+      <div class="ghosts"><div class="ghost">LAUNCH</div><div class="ghost">STAGE</div><div class="ghost">STOP</div></div>
+      <div class="water">PRJCT ZXORE&nbsp; · &nbsp;CODM</div>
+    </div>
+    <div class="cap">MENU · WARM SCREEN</div>
+  </div>
+
+</body>
+</html>
