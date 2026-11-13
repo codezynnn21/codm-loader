@@ -1,17 +1,32 @@
 {
+  "_note": "same schema the loader stages to /data/local/tmp/codm_config.json. empty offsets are skipped by the hook lib; fill them from codm_recon.json (mode: recon) or dump.cs.",
   "mode": "recon",
-  "filter": "skin|camo|weapon|loadout|appearance",
+  "filter": "skin|camo|weapon|loadout|appearance|ban|lock|penalty|restrict",
   "output": "/data/local/tmp/codm_recon.json",
   "rules": [
     {
+      "kind": "method",
       "class": "PlayerWeapon",
       "method": "get_CurrentSkinId",
       "params": 0,
       "value": 1001
     },
     {
-      "offset": "0x0",
-      "value": 1001
+      "kind": "method",
+      "class": "PlayerWeapon",
+      "method": "get_CurrentCamoId",
+      "params": 0,
+      "value": 2001
+    },
+    {
+      "kind": "patch",
+      "offset": "",
+      "value": 1
+    },
+    {
+      "kind": "nop",
+      "offset": "",
+      "value": 4
     }
   ]
 }
