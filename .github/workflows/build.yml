@@ -1,1 +1,52 @@
+name: build-loader
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      frida_version:
+        description: frida-server version (must match your host frida)
+        required: false
+        default: '16.5.6'
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: bundle frida-server + scripts
+        env:
+          VER: ${{ github.event.inputs.frida_version || '16.5.6' }}
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/assets
+          URL="https://github.com/frida/frida/releases/download/${VER}/frida-server-${VER}-android-arm64.xz"
+          echo "fetching $URL"
+          curl -fsSL "$URL" -o /tmp/frida-server.xz
+          xz -d /tmp/frida-server.xz
+          install -m 755 /tmp/frida-server app/src/main/assets/frida-server
+          cp codm-skin/codm.js app/src/main/assets/codm.js
+          cp codm-skin/config.json app/src/main/assets/codm_config.json
+          ls -l app/src/main/assets
+
+      - name: assemble debug
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: codm-loader-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
