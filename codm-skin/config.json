@@ -1,0 +1,17 @@
+{
+  "mode": "recon",
+  "filter": "skin|camo|weapon|loadout|appearance",
+  "output": "/data/local/tmp/codm_recon.json",
+  "rules": [
+    {
+      "class": "PlayerWeapon",
+      "method": "get_CurrentSkinId",
+      "params": 0,
+      "value": 1001
+    },
+    {
+      "offset": "0x0",
+      "value": 1001
+    }
+  ]
+}
